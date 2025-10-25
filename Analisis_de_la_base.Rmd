@@ -1,0 +1,20 @@
+---
+title: "Análisis_descriptivo"
+output: html_document
+date: "2025-10-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library("dplyr")
+```
+Análisis descriptivo de cada variable.
+```{r}
+data <- read.csv("ProstateNHIV2018-2024.csv")
+continuas <- select(data, AGEP_A, BMI, PROSTAGETC_A, CIGNOW_A, DIBAGETC_A, DIFYRSTC1_A)
+hist(data$PROSTCAN_A, breaks = 2, main = "Diagnóstico de cáncer de próstata", 
+     xlab = "Diagnóstico", ylab = "Frecuencia")
+```
