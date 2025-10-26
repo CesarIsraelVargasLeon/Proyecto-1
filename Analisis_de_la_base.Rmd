@@ -11,10 +11,42 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include=FALSE}
 library("dplyr")
 ```
-Análisis descriptivo de cada variable.
+Análisis exploratorio de la base.
+Variables continuas.
+Edad:
 ```{r}
 data <- read.csv("ProstateNHIV2018-2024.csv")
 continuas <- select(data, AGEP_A, BMI, PROSTAGETC_A, CIGNOW_A, DIBAGETC_A, DIFYRSTC1_A)
+boxplot(data$AGEP_A)
+```
+Índice de masa corporal:
+```{r}
+boxplot(data[data$BMI<60,]$BMI)
+datos <- data[data$BMI<60,]
+```
+Edad de diagnóstico con cáncer de próstata:
+```{r}
+boxplot(datos$PROSTAGETC_A)
+```
+Consumo de cigarrillos promedio actual:
+```{r}
+boxplot(datos$CIGNOW_A)
+```
+Edad de diagnóstico positivo de diabetes:
+```{r}
+boxplot(datos$DIBAGETC_A)
+```
+Tiempo siendo diabetico:
+```{r}
+boxplot(datos$DIFYRSTC1_A)
+```
+
+
+
+
+
+
+```{r}
 hist(data$PROSTCAN_A, breaks = 2, main = "Diagnóstico de cáncer de próstata", 
      xlab = "Diagnóstico", ylab = "Frecuencia")
 ```
