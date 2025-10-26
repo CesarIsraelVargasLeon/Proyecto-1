@@ -1,5 +1,5 @@
 ---
-title: "Análisis_descriptivo"
+title: "Análisi Exploratorio"
 output: html_document
 date: "2025-10-25"
 ---
@@ -11,42 +11,247 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include=FALSE}
 library("dplyr")
 ```
-Análisis exploratorio de la base.
+# Análisis exploratorio de la base.
 Variables continuas.
 Edad:
 ```{r}
 data <- read.csv("ProstateNHIV2018-2024.csv")
-continuas <- select(data, AGEP_A, BMI, PROSTAGETC_A, CIGNOW_A, DIBAGETC_A, DIFYRSTC1_A)
-boxplot(data$AGEP_A)
+filtro <- data[data$BMI<60 & data$HISPALLP_A>1 & data$SMKCIGST_A<5 & data$DIBEV_A<3 & data$HYPEV_A<3,]
+datos <- subset(filtro, select = -c(SMKNOW_A, DIFYRSTC1_A, SMKEV_A))
+
+datos$PROSTCAN_A <- factor(datos$PROSTCAN_A, 
+                           levels = c(2, 1), 
+                           labels = c("No (Control)", "Sí (Caso)"))
+
+datos$HYPEV_A <- factor(datos$HYPEV_A, 
+                     levels = c(2, 1), 
+                     labels = c("No", "Sí"))
+    
+datos$DIBEV_A <- factor(datos$DIBEV_A, 
+                     levels = c(2, 1), 
+                     labels = c("No", "Sí"))
+    
+datos$SMKCIGST_A <- factor(datos$SMKCIGST_A, 
+                        levels = c(4, 1, 2, 3), 
+                        labels = c("Nunca", "Fumador Diario", 
+                                   "Fumador Ocasional", "Exfumador"))
+    
+datos$HISPALLP_A <- factor(datos$HISPALLP_A,
+                        levels = c(2, 3),
+                        labels = c("Blanco", "Negro"))
+
 ```
+
+```{r, include=FALSE}
+library("tidyverse")
+library("gtsummary")
+```
+Casos positivos de cáncer de próstata a traves de los años que incluye el estudio.
+```{r}
+casos_positivos <- datos[!datos$PROSTCAN_A == 1, ]
+casos_por_año <- table(casos_positivos$Año)
+
+bar_coords <- barplot(
+  casos_por_año,
+  main = "Número de Casos Positivos de Cáncer de Próstata por Año",
+  xlab = "Año de la Encuesta",
+  ylab = "Número de Casos Reportados",
+  ylim = c(0, max(casos_por_año) * 1.1), 
+  col = "purple",
+  las = 2)
+
+text(
+  x = bar_coords, 
+  y = casos_por_año,
+  label = casos_por_año,
+  pos = 3,
+  cex = 0.8)
+```
+Edad:
+```{r}
+boxplot(
+  datos$AGEP_A,
+  main = "Distribución de la edad de los participantes",
+  ylab = "Años",
+  xlab = "Participantes",
+  col = "goldenrod",
+  outcol = "red",
+  outpch = 19
+)
+hist(datos$AGEP_A,
+     main = "Distribución edad",
+     xlab = "Participantes",
+     prob = TRUE,
+     col = 3,
+     density = 10, 
+     angle = 20)
+```
+
 Índice de masa corporal:
 ```{r}
-boxplot(data[data$BMI<60,]$BMI)
-datos <- data[data$BMI<60,]
+boxplot(
+  datos$BMI,
+  main = "Distribución del Índice de Masa Corporal (IMC)",
+  ylab = "IMC (kg/m²)",
+  xlab = "Participantes",
+  col = "lightblue",
+  outcol = "red",
+  outpch = 19    
+)
+hist(datos$BMI,
+     main = "Distribución IMC",
+     xlab = "IMC",
+     prob = TRUE,
+     col = 2,
+     density = 10, 
+     angle = 20)
 ```
-Edad de diagnóstico con cáncer de próstata:
+
+Gráfico 1: Box-plot de Edad vs Cáncer
 ```{r}
-boxplot(datos$PROSTAGETC_A)
+ggplot(datos, aes(x = PROSTCAN_A, y = AGEP_A, fill = PROSTCAN_A)) +
+  geom_boxplot() +
+  labs(
+    title = "Distribución de Edad por Diagnóstico de Cáncer de Próstata",
+    x = "Diagnóstico de Cáncer de Próstata",
+    y = "Edad (años)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
 ```
-Consumo de cigarrillos promedio actual:
+
+Gráfico 2: Box-plot de IMC vs Cáncer
 ```{r}
-boxplot(datos$CIGNOW_A)
+ggplot(datos, aes(x = PROSTCAN_A, y = BMI, fill = PROSTCAN_A)) +
+  geom_boxplot() +
+  labs(
+    title = "Distribución de IMC por Diagnóstico de Cáncer de Próstata",
+    x = "Diagnóstico de Cáncer de Próstata",
+    y = "IMC (kg/m²)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
-Edad de diagnóstico positivo de diabetes:
+
+Gráfico 3: Barras Apiladas de Tabaquismo vs Cáncer
 ```{r}
-boxplot(datos$DIBAGETC_A)
+ggplot(datos, aes(x = PROSTCAN_A, fill = SMKCIGST_A)) +
+  geom_bar(position = "fill") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Distribución del Estatus de Tabaquismo por Diagnóstico",
+    x = "Diagnóstico de Cáncer de Próstata",
+    y = "Proporción",
+    fill = "Tabaquismo"
+  ) +
+  theme_minimal()
 ```
-Tiempo siendo diabetico:
+Para los que fuman a diario su consumo promedio
 ```{r}
-boxplot(datos$DIFYRSTC1_A)
+boxplot(
+  datos$CIGNOW_A[datos$CIGNOW_A <= 94 & !is.na(datos$CIGNOW_A)],
+  main = "Distribución del Consumo de Cigarrillos",
+  ylab = "Cigarrillos por día",
+  xlab = "Fumadores Actuales",
+  col = "salmon",
+  outcol = "red",
+  outpch = 19
+)
 ```
-
-
-
-
-
+Edad de diagnóstico de cáncer y de diabetes
 
 ```{r}
-hist(data$PROSTCAN_A, breaks = 2, main = "Diagnóstico de cáncer de próstata", 
-     xlab = "Diagnóstico", ylab = "Frecuencia")
+plot(datos$DIBAGETC_A~datos$PROSTAGETC_A,
+    main="Diagnóstico de diabetes vs cáncer",
+    ylab = "Edad de diagnóstico de Diabetes",
+    xlab = "Edad de diagnóstico de Cáncer")
 ```
+```{r}
+boxplot(
+  datos$PROSTAGETC_A[!is.na(datos$PROSTAGETC_A)],
+  main = "Distribución de Edad al Diagnóstico de Cáncer de Próstata",
+  ylab = "Edad (años)",
+  xlab = "Pacientes con Cáncer (PROSTCAN_A = 1)",
+  col = "steelblue",
+  outcol = "red",
+  outpch = 19
+)
+```
+
+```{r}
+boxplot(
+  datos$DIBAGETC_A[!is.na(datos$DIBAGETC_A)],
+  main = "Distribución de Edad al Diagnóstico de Diabetes",
+  ylab = "Edad (años)",
+  xlab = "Pacientes con Diabetes (DIBEV_A = 1)",
+  col = "seagreen",
+  outcol = "red",
+  outpch = 19
+)
+```
+Variables finales para el modelo
+```{r}
+mod <- subset(datos, select = -c(PROSTAGETC_A, CIGNOW_A, DIBAGETC_A, Año))
+```
+
+```{r}
+tabla_1 <- datos %>%
+  select(
+    `Edad (años)` = AGEP_A,
+    `Raza/Etnia` = HISPALLP_A,
+    `IMC (kg/m²)` = BMI,
+    `Estatus de Tabaquismo` = SMKCIGST_A,
+    `Diagnóstico de Hipertensión` = HYPEV_A,
+    `Diagnóstico de Diabetes` = DIBEV_A,
+    `Cáncer de Próstata` = PROSTCAN_A
+  ) %>%
+
+  tbl_summary(
+    statistic = list(
+      all_continuous() ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = list(
+      all_continuous() ~ 1,
+      all_categorical() ~ c(0, 1)
+    ),
+  ) %>%
+  modify_header(label ~ "**Variable**") %>%
+  modify_caption("**Tabla 1. Características de la Población de Estudio (N = {N})**")
+tabla_1
+```
+
+```{r}
+tabla_2 <- datos %>%
+  select(
+    `Edad (años)` = AGEP_A,
+    `Raza/Etnia` = HISPALLP_A,
+    `IMC (kg/m²)` = BMI,
+    `Estatus de Tabaquismo` = SMKCIGST_A,
+    `Diagnóstico de Hipertensión` = HYPEV_A,
+    `Diagnóstico de Diabetes` = DIBEV_A,
+    PROSTCAN_A
+  ) %>%
+  
+  tbl_summary(
+    by = PROSTCAN_A,
+    statistic = list(
+      all_continuous() ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    digits = list(
+      all_continuous() ~ 1,
+      all_categorical() ~ c(0, 1)
+    ),
+  ) %>%
+  add_p(test = list(all_continuous() ~ "wilcox.test",
+                     all_categorical() ~ "chisq.test")) %>%
+  add_overall() %>%
+  modify_header(label ~ "**Variable**") %>%
+  modify_caption("**Tabla 2. Comparación de Características entre Casos y Controles**") %>%
+  bold_labels() %>%
+  bold_p(t = 0.05)
+tabla_2
+```
+
