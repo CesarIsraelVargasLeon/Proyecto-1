@@ -1,6 +1,8 @@
 ---
 title: "Análisi Exploratorio"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 date: "2025-10-25"
 ---
 
@@ -12,8 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library("dplyr")
 ```
 # Análisis exploratorio de la base.
-Variables continuas.
-Edad:
 ```{r}
 data <- read.csv("ProstateNHIV2018-2024.csv")
 filtro <- data[data$BMI<60 & data$HISPALLP_A>1 & data$SMKCIGST_A<5 & data$DIBEV_A<3 & data$HYPEV_A<3,]
@@ -196,6 +196,11 @@ mod <- subset(datos, select = -c(PROSTAGETC_A, CIGNOW_A, DIBAGETC_A, Año))
 ```
 
 ```{r}
+ks.test(datos$AGEP_A, "pnorm")
+ks.test( datos$BMI, "pnorm")
+```
+
+```{r}
 tabla_1 <- datos %>%
   select(
     `Edad (años)` = AGEP_A,
@@ -254,4 +259,3 @@ tabla_2 <- datos %>%
   bold_p(t = 0.05)
 tabla_2
 ```
-

@@ -1,0 +1,534 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{anyfontsize}
+\usepackage{multirow}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Análisi Exploratorio},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Análisi Exploratorio}
+\author{}
+\date{\vspace{-2.5em}2025-10-25}
+
+\begin{document}
+\maketitle
+
+\section{Análisis exploratorio de la
+base.}\label{anuxe1lisis-exploratorio-de-la-base.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"ProstateNHIV2018{-}2024.csv"}\NormalTok{)}
+\NormalTok{filtro }\OtherTok{\textless{}{-}}\NormalTok{ data[data}\SpecialCharTok{$}\NormalTok{BMI}\SpecialCharTok{\textless{}}\DecValTok{60} \SpecialCharTok{\&}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{HISPALLP\_A}\SpecialCharTok{\textgreater{}}\DecValTok{1} \SpecialCharTok{\&}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{SMKCIGST\_A}\SpecialCharTok{\textless{}}\DecValTok{5} \SpecialCharTok{\&}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{DIBEV\_A}\SpecialCharTok{\textless{}}\DecValTok{3} \SpecialCharTok{\&}\NormalTok{ data}\SpecialCharTok{$}\NormalTok{HYPEV\_A}\SpecialCharTok{\textless{}}\DecValTok{3}\NormalTok{,]}
+\NormalTok{datos }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(filtro, }\AttributeTok{select =} \SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(SMKNOW\_A, DIFYRSTC1\_A, SMKEV\_A))}
+
+\NormalTok{datos}\SpecialCharTok{$}\NormalTok{PROSTCAN\_A }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{PROSTCAN\_A, }
+                           \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{), }
+                           \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No (Control)"}\NormalTok{, }\StringTok{"Sí (Caso)"}\NormalTok{))}
+
+\NormalTok{datos}\SpecialCharTok{$}\NormalTok{HYPEV\_A }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{HYPEV\_A, }
+                     \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{), }
+                     \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"}\NormalTok{, }\StringTok{"Sí"}\NormalTok{))}
+    
+\NormalTok{datos}\SpecialCharTok{$}\NormalTok{DIBEV\_A }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{DIBEV\_A, }
+                     \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{), }
+                     \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"No"}\NormalTok{, }\StringTok{"Sí"}\NormalTok{))}
+    
+\NormalTok{datos}\SpecialCharTok{$}\NormalTok{SMKCIGST\_A }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{SMKCIGST\_A, }
+                        \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{), }
+                        \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Nunca"}\NormalTok{, }\StringTok{"Fumador Diario"}\NormalTok{, }
+                                   \StringTok{"Fumador Ocasional"}\NormalTok{, }\StringTok{"Exfumador"}\NormalTok{))}
+    
+\NormalTok{datos}\SpecialCharTok{$}\NormalTok{HISPALLP\_A }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{HISPALLP\_A,}
+                        \AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+                        \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"Blanco"}\NormalTok{, }\StringTok{"Negro"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Casos positivos de cáncer de próstata a traves de los años que incluye
+el estudio.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{casos\_positivos }\OtherTok{\textless{}{-}}\NormalTok{ datos[}\SpecialCharTok{!}\NormalTok{datos}\SpecialCharTok{$}\NormalTok{PROSTCAN\_A }\SpecialCharTok{==} \DecValTok{1}\NormalTok{, ]}
+\NormalTok{casos\_por\_año }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(casos\_positivos}\SpecialCharTok{$}\NormalTok{Año)}
+
+\NormalTok{bar\_coords }\OtherTok{\textless{}{-}} \FunctionTok{barplot}\NormalTok{(}
+\NormalTok{  casos\_por\_año,}
+  \AttributeTok{main =} \StringTok{"Número de Casos Positivos de Cáncer de Próstata por Año"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Año de la Encuesta"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Número de Casos Reportados"}\NormalTok{,}
+  \AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(casos\_por\_año) }\SpecialCharTok{*} \FloatTok{1.1}\NormalTok{), }
+  \AttributeTok{col =} \StringTok{"purple"}\NormalTok{,}
+  \AttributeTok{las =} \DecValTok{2}\NormalTok{)}
+
+\FunctionTok{text}\NormalTok{(}
+  \AttributeTok{x =}\NormalTok{ bar\_coords, }
+  \AttributeTok{y =}\NormalTok{ casos\_por\_año,}
+  \AttributeTok{label =}\NormalTok{ casos\_por\_año,}
+  \AttributeTok{pos =} \DecValTok{3}\NormalTok{,}
+  \AttributeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-4-1.pdf}}
+Edad:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(}
+\NormalTok{  datos}\SpecialCharTok{$}\NormalTok{AGEP\_A,}
+  \AttributeTok{main =} \StringTok{"Distribución de la edad de los participantes"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Años"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Participantes"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"goldenrod"}\NormalTok{,}
+  \AttributeTok{outcol =} \StringTok{"red"}\NormalTok{,}
+  \AttributeTok{outpch =} \DecValTok{19}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{AGEP\_A,}
+     \AttributeTok{main =} \StringTok{"Distribución edad"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"Participantes"}\NormalTok{,}
+     \AttributeTok{prob =} \ConstantTok{TRUE}\NormalTok{,}
+     \AttributeTok{col =} \DecValTok{3}\NormalTok{,}
+     \AttributeTok{density =} \DecValTok{10}\NormalTok{, }
+     \AttributeTok{angle =} \DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-5-2.pdf}}
+
+Índice de masa corporal:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(}
+\NormalTok{  datos}\SpecialCharTok{$}\NormalTok{BMI,}
+  \AttributeTok{main =} \StringTok{"Distribución del Índice de Masa Corporal (IMC)"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"IMC (kg/m²)"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Participantes"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"lightblue"}\NormalTok{,}
+  \AttributeTok{outcol =} \StringTok{"red"}\NormalTok{,}
+  \AttributeTok{outpch =} \DecValTok{19}    
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-6-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{BMI,}
+     \AttributeTok{main =} \StringTok{"Distribución IMC"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"IMC"}\NormalTok{,}
+     \AttributeTok{prob =} \ConstantTok{TRUE}\NormalTok{,}
+     \AttributeTok{col =} \DecValTok{2}\NormalTok{,}
+     \AttributeTok{density =} \DecValTok{10}\NormalTok{, }
+     \AttributeTok{angle =} \DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-6-2.pdf}}
+
+Gráfico 1: Box-plot de Edad vs Cáncer
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(datos, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ PROSTCAN\_A, }\AttributeTok{y =}\NormalTok{ AGEP\_A, }\AttributeTok{fill =}\NormalTok{ PROSTCAN\_A)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribución de Edad por Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Edad (años)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-7-1.pdf}}
+
+Gráfico 2: Box-plot de IMC vs Cáncer
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(datos, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ PROSTCAN\_A, }\AttributeTok{y =}\NormalTok{ BMI, }\AttributeTok{fill =}\NormalTok{ PROSTCAN\_A)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribución de IMC por Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"IMC (kg/m²)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-8-1.pdf}}
+
+Gráfico 3: Barras Apiladas de Tabaquismo vs Cáncer
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(datos, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ PROSTCAN\_A, }\AttributeTok{fill =}\NormalTok{ SMKCIGST\_A)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"fill"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_y\_continuous}\NormalTok{(}\AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{percent) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribución del Estatus de Tabaquismo por Diagnóstico"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Proporción"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Tabaquismo"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-9-1.pdf}}
+Para los que fuman a diario su consumo promedio
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(}
+\NormalTok{  datos}\SpecialCharTok{$}\NormalTok{CIGNOW\_A[datos}\SpecialCharTok{$}\NormalTok{CIGNOW\_A }\SpecialCharTok{\textless{}=} \DecValTok{94} \SpecialCharTok{\&} \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{CIGNOW\_A)],}
+  \AttributeTok{main =} \StringTok{"Distribución del Consumo de Cigarrillos"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Cigarrillos por día"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Fumadores Actuales"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"salmon"}\NormalTok{,}
+  \AttributeTok{outcol =} \StringTok{"red"}\NormalTok{,}
+  \AttributeTok{outpch =} \DecValTok{19}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-10-1.pdf}}
+Edad de diagnóstico de cáncer y de diabetes
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{DIBAGETC\_A}\SpecialCharTok{\textasciitilde{}}\NormalTok{datos}\SpecialCharTok{$}\NormalTok{PROSTAGETC\_A,}
+    \AttributeTok{main=}\StringTok{"Diagnóstico de diabetes vs cáncer"}\NormalTok{,}
+    \AttributeTok{ylab =} \StringTok{"Edad de diagnóstico de Diabetes"}\NormalTok{,}
+    \AttributeTok{xlab =} \StringTok{"Edad de diagnóstico de Cáncer"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-11-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(}
+\NormalTok{  datos}\SpecialCharTok{$}\NormalTok{PROSTAGETC\_A[}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{PROSTAGETC\_A)],}
+  \AttributeTok{main =} \StringTok{"Distribución de Edad al Diagnóstico de Cáncer de Próstata"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Edad (años)"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Pacientes con Cáncer (PROSTCAN\_A = 1)"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"steelblue"}\NormalTok{,}
+  \AttributeTok{outcol =} \StringTok{"red"}\NormalTok{,}
+  \AttributeTok{outpch =} \DecValTok{19}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(}
+\NormalTok{  datos}\SpecialCharTok{$}\NormalTok{DIBAGETC\_A[}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{DIBAGETC\_A)],}
+  \AttributeTok{main =} \StringTok{"Distribución de Edad al Diagnóstico de Diabetes"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Edad (años)"}\NormalTok{,}
+  \AttributeTok{xlab =} \StringTok{"Pacientes con Diabetes (DIBEV\_A = 1)"}\NormalTok{,}
+  \AttributeTok{col =} \StringTok{"seagreen"}\NormalTok{,}
+  \AttributeTok{outcol =} \StringTok{"red"}\NormalTok{,}
+  \AttributeTok{outpch =} \DecValTok{19}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Analisis_de_la_base_files/figure-latex/unnamed-chunk-13-1.pdf}}
+Variables finales para el modelo
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(datos, }\AttributeTok{select =} \SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(PROSTAGETC\_A, CIGNOW\_A, DIBAGETC\_A, Año))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ks.test}\NormalTok{(datos}\SpecialCharTok{$}\NormalTok{AGEP\_A, }\StringTok{"pnorm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in ks.test.default(datos$AGEP_A, "pnorm"): ties should not be present
+## for the one-sample Kolmogorov-Smirnov test
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Asymptotic one-sample Kolmogorov-Smirnov test
+## 
+## data:  datos$AGEP_A
+## D = 1, p-value < 2.2e-16
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ks.test}\NormalTok{( datos}\SpecialCharTok{$}\NormalTok{BMI, }\StringTok{"pnorm"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in ks.test.default(datos$BMI, "pnorm"): ties should not be present for
+## the one-sample Kolmogorov-Smirnov test
+\end{verbatim}
+
+\begin{verbatim}
+## 
+##  Asymptotic one-sample Kolmogorov-Smirnov test
+## 
+## data:  datos$BMI
+## D = 1, p-value < 2.2e-16
+## alternative hypothesis: two-sided
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tabla\_1 }\OtherTok{\textless{}{-}}\NormalTok{ datos }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}
+    \StringTok{\textasciigrave{}}\AttributeTok{Edad (años)}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ AGEP\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Raza/Etnia}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ HISPALLP\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{IMC (kg/m²)}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ BMI,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Estatus de Tabaquismo}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ SMKCIGST\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Diagnóstico de Hipertensión}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ HYPEV\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Diagnóstico de Diabetes}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ DIBEV\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Cáncer de Próstata}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ PROSTCAN\_A}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+
+  \FunctionTok{tbl\_summary}\NormalTok{(}
+    \AttributeTok{statistic =} \FunctionTok{list}\NormalTok{(}
+      \FunctionTok{all\_continuous}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"\{median\} (\{p25\}, \{p75\})"}\NormalTok{,}
+      \FunctionTok{all\_categorical}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"\{n\} (\{p\}\%)"}
+\NormalTok{    ),}
+    \AttributeTok{digits =} \FunctionTok{list}\NormalTok{(}
+      \FunctionTok{all\_continuous}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
+      \FunctionTok{all\_categorical}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{    ),}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{modify\_header}\NormalTok{(label }\SpecialCharTok{\textasciitilde{}} \StringTok{"**Variable**"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{modify\_caption}\NormalTok{(}\StringTok{"**Tabla 1. Características de la Población de Estudio (N = \{N\})**"}\NormalTok{)}
+\NormalTok{tabla\_1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[t]
+\caption{\label{tab:unnamed-chunk-16}\textbf{Tabla 1. Características de la Población de Estudio (N = 9480)}} 
+\fontsize{12.0pt}{14.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lc}
+\toprule
+\textbf{Variable} & \textbf{N = 9,480}\textsuperscript{\textit{1}} \\ 
+\midrule\addlinespace[2.5pt]
+Edad (a\~nos) & 71.0 (64.0, 78.0) \\ 
+Raza/Etnia &  \\ 
+    Blanco & 8,900 (93.9\%) \\ 
+    Negro & 580 (6.1\%) \\ 
+IMC (kg/m\texttwosuperior) & 37.8 (33.7, 42.7) \\ 
+Estatus de Tabaquismo &  \\ 
+    Nunca & 4,425 (46.7\%) \\ 
+    Fumador Diario & 741 (7.8\%) \\ 
+    Fumador Ocasional & 143 (1.5\%) \\ 
+    Exfumador & 4,171 (44.0\%) \\ 
+Diagn\\'ostico de Hipertensi\\'on &  \\ 
+    No & 3,657 (38.6\%) \\ 
+    S\\'i & 5,823 (61.4\%) \\ 
+Diagn\\'ostico de Diabetes &  \\ 
+    No & 7,747 (81.7\%) \\ 
+    S\\'i & 1,733 (18.3\%) \\ 
+C\\'ancer de Pr\\'ostata &  \\ 
+    No (Control) & 6,668 (70.3\%) \\ 
+    S\\'i (Caso) & 2,812 (29.7\%) \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\textsuperscript{\textit{1}}Median (Q1, Q3); n (\%)\\
+\end{minipage}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tabla\_2 }\OtherTok{\textless{}{-}}\NormalTok{ datos }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}
+    \StringTok{\textasciigrave{}}\AttributeTok{Edad (años)}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ AGEP\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Raza/Etnia}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ HISPALLP\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{IMC (kg/m²)}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ BMI,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Estatus de Tabaquismo}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ SMKCIGST\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Diagnóstico de Hipertensión}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ HYPEV\_A,}
+    \StringTok{\textasciigrave{}}\AttributeTok{Diagnóstico de Diabetes}\StringTok{\textasciigrave{}} \OtherTok{=}\NormalTok{ DIBEV\_A,}
+\NormalTok{    PROSTCAN\_A}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  
+  \FunctionTok{tbl\_summary}\NormalTok{(}
+    \AttributeTok{by =}\NormalTok{ PROSTCAN\_A,}
+    \AttributeTok{statistic =} \FunctionTok{list}\NormalTok{(}
+      \FunctionTok{all\_continuous}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"\{median\} (\{p25\}, \{p75\})"}\NormalTok{,}
+      \FunctionTok{all\_categorical}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"\{n\} (\{p\}\%)"}
+\NormalTok{    ),}
+    \AttributeTok{digits =} \FunctionTok{list}\NormalTok{(}
+      \FunctionTok{all\_continuous}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
+      \FunctionTok{all\_categorical}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{    ),}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{add\_p}\NormalTok{(}\AttributeTok{test =} \FunctionTok{list}\NormalTok{(}\FunctionTok{all\_continuous}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"wilcox.test"}\NormalTok{,}
+                     \FunctionTok{all\_categorical}\NormalTok{() }\SpecialCharTok{\textasciitilde{}} \StringTok{"chisq.test"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{add\_overall}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{modify\_header}\NormalTok{(label }\SpecialCharTok{\textasciitilde{}} \StringTok{"**Variable**"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{modify\_caption}\NormalTok{(}\StringTok{"**Tabla 2. Comparación de Características entre Casos y Controles**"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{bold\_labels}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{bold\_p}\NormalTok{(}\AttributeTok{t =} \FloatTok{0.05}\NormalTok{)}
+\NormalTok{tabla\_2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[t]
+\caption{\label{tab:unnamed-chunk-17}\textbf{Tabla 2. Comparación de Características entre Casos y Controles}} 
+\fontsize{12.0pt}{14.0pt}\selectfont
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lcccc}
+\toprule
+\textbf{Variable} & \textbf{Overall}  N = 9,480\textsuperscript{\textit{1}} & \textbf{No (Control)}  N = 6,668\textsuperscript{\textit{1}} & \textbf{Sí (Caso)}  N = 2,812\textsuperscript{\textit{1}} & \textbf{p-value}\textsuperscript{\textit{2}} \\ 
+\midrule\addlinespace[2.5pt]
+{\bfseries Edad (a\~nos)} & 71.0 (64.0, 78.0) & 70.0 (62.0, 77.0) & 74.0 (69.0, 81.0) & {\bfseries <0.001} \\ 
+{\bfseries Raza/Etnia} &  &  &  & {\bfseries <0.001} \\ 
+    Blanco & 8,900 (93.9\%) & 6,458 (96.9\%) & 2,442 (86.8\%) &  \\ 
+    Negro & 580 (6.1\%) & 210 (3.1\%) & 370 (13.2\%) &  \\ 
+{\bfseries IMC (kg/m\texttwosuperior)} & 37.8 (33.7, 42.7) & 37.8 (33.7, 42.7) & 37.9 (33.7, 42.4) & 0.8 \\ 
+{\bfseries Estatus de Tabaquismo} &  &  &  & {\bfseries <0.001} \\ 
+    Nunca & 4,425 (46.7\%) & 3,102 (46.5\%) & 1,323 (47.0\%) &  \\ 
+    Fumador Diario & 741 (7.8\%) & 579 (8.7\%) & 162 (5.8\%) &  \\ 
+    Fumador Ocasional & 143 (1.5\%) & 108 (1.6\%) & 35 (1.2\%) &  \\ 
+    Exfumador & 4,171 (44.0\%) & 2,879 (43.2\%) & 1,292 (45.9\%) &  \\ 
+{\bfseries Diagn\\'ostico de Hipertensi\\'on} &  &  &  & {\bfseries <0.001} \\ 
+    No & 3,657 (38.6\%) & 2,706 (40.6\%) & 951 (33.8\%) &  \\ 
+    S\\'i & 5,823 (61.4\%) & 3,962 (59.4\%) & 1,861 (66.2\%) &  \\ 
+{\bfseries Diagn\\'ostico de Diabetes} &  &  &  & 0.067 \\ 
+    No & 7,747 (81.7\%) & 5,481 (82.2\%) & 2,266 (80.6\%) &  \\ 
+    S\\'i & 1,733 (18.3\%) & 1,187 (17.8\%) & 546 (19.4\%) &  \\ 
+\bottomrule
+\end{tabular*}
+\begin{minipage}{\linewidth}
+\textsuperscript{\textit{1}}Median (Q1, Q3); n (\%)\\
+\textsuperscript{\textit{2}}Wilcoxon rank sum test; Pearson's Chi-squared test\\
+\end{minipage}
+\end{table}
+
+\end{document}
