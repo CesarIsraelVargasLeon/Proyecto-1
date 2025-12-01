@@ -1,9 +1,8 @@
 ---
-title: "Análisi Exploratorio"
+title: "Análisi Exploratorio y Modelo"
 output:
   html_document: default
   pdf_document: default
-date: "2025-10-25"
 ---
 
 ```{r setup, include=FALSE}
@@ -259,3 +258,127 @@ tabla_2 <- datos %>%
   bold_p(t = 0.05)
 tabla_2
 ```
+
+# Modelo de regresión logística
+
+## Modelo principal
+```{r}
+library(tidyverse)
+library(gtsummary)
+library(ggeffects)
+```
+
+```{r}
+m_principal <- glm(PROSTCAN_A ~ AGEP_A + HISPALLP_A + BMI + SMKCIGST_A + DIBEV_A + HYPEV_A,
+                   family = binomial(link="logit"),
+                   data = mod)
+```
+
+```{r}
+summary(m_principal)
+```
+```{r}
+library(broom.helpers)
+```
+```{r}
+tabla_modelo_principal <- tbl_regression(
+  m_principal,
+  exponentiate = TRUE,
+  label = list(
+    AGEP_A ~ "Edad (años)",
+    HISPALLP_A ~ "Raza/Etnia",
+    BMI ~ "IMC (kg/m²)",
+    HYPEV_A ~ "Hipertensión",
+    SMKCIGST_A ~ "Estatus Tabaquismo",
+    DIBEV_A ~ "Diabetes"
+  )
+) %>%
+  bold_p(t = 0.05) %>% # Negrita si p < 0.05
+  bold_labels() %>%
+  modify_header(label = "**Variable**") %>%
+  modify_caption("**Tabla 3. Factores asociados al Cáncer de Próstata (Modelo Multivariado)**")
+```
+
+```{r}
+tabla_modelo_principal
+```
+
+## Modelo con interacciones
+
+```{r}
+m_inter <- glm(
+  formula = PROSTCAN_A ~ AGEP_A + HISPALLP_A + 
+            # Interacciones (el * incluye los efectos individuales automáticamente)
+            SMKCIGST_A * DIBEV_A +   # Interacción Tabaquismo - Diabetes
+            SMKCIGST_A * HYPEV_A +   # Interacción Tabaquismo - Hipertensión
+            SMKCIGST_A * BMI,        # Interacción Tabaquismo - Obesidad (IMC)
+  family = binomial(link = "logit"),
+  data = mod)
+```
+
+```{r}
+summary(m_inter)
+```
+
+```{r}
+tabla_inter <- tbl_regression(
+  m_inter,
+  exponentiate = TRUE,
+  label = list(
+    SMKCIGST_A ~ "Tabaquismo", 
+    DIBEV_A ~ "Diabetes",
+    HYPEV_A ~ "Hipertensión",
+    BMI ~ "IMC"
+  )
+) %>%
+  bold_p(t = 0.05) %>%
+  bold_labels() %>% 
+  modify_caption("**Tabla 4. Modelo con Múltiples Interacciones Metabólicas**")
+```
+
+```{r}
+tabla_inter
+```
+
+```{r}
+predicciones_finales <- ggpredict(m_inter, 
+                                  terms = c("SMKCIGST_A", "DIBEV_A"))
+
+grafico_final <- ggplot(predicciones_finales, aes(x = x, y = predicted, color = group, group = group)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), 
+                width = 0.2, alpha = 0.5) +
+  labs(
+    title = "Efecto Sinérgico: Tabaquismo y Diabetes",
+    subtitle = "Probabilidad Predicha de Cáncer de Próstata (Ajustado por Edad, Raza, IMC e Hipertensión)",
+    x = "Estatus de Tabaquismo",
+    y = "Probabilidad de Cáncer (%)",
+    color = "¿Tiene Diabetes?"
+  ) +
+
+  scale_y_continuous(labels = scales::percent) +
+
+  scale_color_manual(values = c("No" = "#1f77b4", "Sí" = "#d62728")) +
+  
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14),
+    axis.text.x = element_text(angle = 0) 
+  )
+
+plot(grafico_final)
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
